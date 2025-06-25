@@ -58,8 +58,8 @@ graph TB
         CHAT1[Chat Service 1<br/>WebSocket + HTTP]
         CHAT2[Chat Service 2<br/>WebSocket + HTTP]
         CHAT3[Chat Service 3<br/>WebSocket + HTTP]
-        GROUP[Group Service<br/>RabbitMQ]
-        MSG[Message Service<br/>RabbitMQ]
+        GROUP[Group Service<br/>RabbitMQ + Kafka]
+        MSG[Message Service<br/>RabbitMQ + Kafka]
         USER[User Service<br/>RabbitMQ]
     end
     
@@ -89,12 +89,23 @@ graph TB
     CHAT1 --> MONGO
     CHAT1 --> REDIS
     CHAT1 --> KAFKA
+    CHAT2 --> MONGO
+    CHAT2 --> REDIS
+    CHAT2 --> KAFKA
+    CHAT3 --> MONGO
+    CHAT3 --> REDIS
+    CHAT3 --> KAFKA
     
     GROUP --> MONGO
+    GROUP --> KAFKA
     GROUP --> RABBIT
     
     MSG --> MONGO
+    MSG --> KAFKA
     MSG --> RABBIT
+    
+    USER --> MONGO
+    USER --> RABBIT
 ```
 
 ## 🛠 Tech Stack
