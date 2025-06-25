@@ -1,4 +1,4 @@
-# 🚀 Scalable Chat Application
+# 🚀 BuzzChat - Scalable Chat Application
 
 A modern, real-time chat application built with a microservices architecture, featuring instant messaging, group chats, file sharing, and user presence tracking. Designed to scale to thousands of concurrent users.
 
