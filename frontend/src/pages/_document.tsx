@@ -4,6 +4,19 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        {/* Favicon and Apple Touch Icons */}
+        <link rel="icon" href="/bee-logo.svg" type="image/svg+xml" />
+        {/* <link rel="icon" href="/favicon.ico" sizes="any" /> */}
+        <link rel="apple-touch-icon" href="/bee-logo.svg" />
+        <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* Meta tags */}
+        <meta name="theme-color" content="#FBBF24" />
+        <meta name="description" content="BuzzChat - Where Conversations Buzz to Life" />
+        <meta name="application-name" content="BuzzChat" />
+        <meta name="apple-mobile-web-app-title" content="BuzzChat" />
+        
+        {/* Font preloads */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

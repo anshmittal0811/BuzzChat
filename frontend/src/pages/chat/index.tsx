@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import Group from "../group";
 import Settings from "@/components/Settings";
 import moment from "moment";
+import AnimatedBeeLogo from "@/components/AnimatedBeeLogo";
 
 export async function getServerSideProps() {
   return {
@@ -86,7 +87,8 @@ const Chat = () => {
           <SidebarHeader className="py-0">
             <div className="flex flex-row h-[8vh] justify-between items-center">
               <div className="flex items-center gap-3 text-white">
-                <text className="text-xl font-bold text-white">Chats</text>
+                <AnimatedBeeLogo size="sm" />
+                <text className="text-xl font-bold text-white">BuzzChat</text>
               </div>
               <div>
                 {open && (
@@ -178,6 +180,10 @@ const Chat = () => {
             {!(open && !isMobile) && (
               <div className="flex flex-row justify-center items-center gap-3">
                 <SidebarTrigger className="-ml-1 text-white" />
+                <div className="flex items-center gap-2">
+                  <AnimatedBeeLogo size="sm" />
+                  <span className="text-lg font-bold text-white">BuzzChat</span>
+                </div>
               </div>
             )}
             {activeGroup && (

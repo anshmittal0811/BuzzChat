@@ -72,6 +72,7 @@ const Auth = () => {
       <div className="flex items-center justify-center p-6 lg:p-12">
         <div className="mx-auto w-full max-w-md space-y-6">
           <div className="space-y-2 text-center">
+            <AnimatedBeeLogo />
             <h1 className="text-3xl font-bold tracking-tight text-white">
               Sign in to your account or create a new one.
             </h1>

@@ -84,11 +84,26 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'flutter': {
+					'0%, 100%': { transform: 'rotate(-12deg) scaleY(1)' },
+					'50%': { transform: 'rotate(-25deg) scaleY(0.8)' }
+				},
+				'flutter-reverse': {
+					'0%, 100%': { transform: 'rotate(12deg) scaleY(1)' },
+					'50%': { transform: 'rotate(25deg) scaleY(0.8)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 3s ease-in-out infinite',
+				'flutter': 'flutter 0.3s ease-in-out infinite',
+				'flutter-reverse': 'flutter-reverse 0.3s ease-in-out infinite'
 			},
 			fontFamily: {
 				sans: ['"Montserrat"', ...fontFamily.sans],
