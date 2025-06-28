@@ -13,10 +13,9 @@ A modern, real-time chat application built with a microservices architecture, fe
 
 ### 💬 Real-time Messaging
 - **Instant messaging** with WebSocket connections
-- **Group chat** functionality with unlimited members
+- **Group chat** functionality
 - **Message persistence** and chat history
 - **Message status tracking** (sent, delivered, seen)
-- **Typing indicators** and user presence
 
 ### 👥 User Management
 - **User authentication** with JWT tokens
@@ -26,7 +25,6 @@ A modern, real-time chat application built with a microservices architecture, fe
 
 ### 📁 File Sharing
 - **Image and file uploads** with Cloudinary integration
-- **Drag and drop** file upload interface
 - **File preview** and download capabilities
 - **Multiple file format support**
 
