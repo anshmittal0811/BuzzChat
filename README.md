@@ -122,7 +122,7 @@ graph TB
 ### Frontend
 - **Framework**: Next.js 15 with React 19
 - **Styling**: Tailwind CSS with Shadcn components
-- **State Management**: React Context API with SWR
+- **State Management**: React Context API
 - **Real-time**: Socket.IO client
 - **Forms**: React Hook Form with Zod validation
 - **File Upload**: Custom chunked upload implementation
