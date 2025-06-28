@@ -35,6 +35,7 @@ import Group from "../group";
 import Settings from "@/components/Settings";
 import moment from "moment";
 import AnimatedBeeLogo from "@/components/AnimatedBeeLogo";
+import { SocketLoadingScreen } from "@/components/ui/socket-loading";
 
 export async function getServerSideProps() {
   return {
@@ -56,6 +57,7 @@ const Chat = () => {
     memberStatus,
     userGroupsStatus,
     setActiveGroup,
+    isSocketConnected,
   } = useChat();
 
   const [createGroup, setCreateGroup] = useState<boolean>(false);
@@ -76,6 +78,11 @@ const Chat = () => {
     return null;
   }
 
+  // Show loading screen if socket is not connected
+  if (!isSocketConnected) {
+    return <SocketLoadingScreen />;
+  }
+
   return (
     <div className="relative overflow-hidden">
       <SidebarProvider
@@ -83,7 +90,7 @@ const Chat = () => {
         defaultOpen={true}
         onOpenChange={(open) => setOpen(open)}
       >
-        <Sidebar className="border-none">
+        <Sidebar className="border-none border">
           <SidebarHeader className="py-0">
             <div className="flex flex-row h-[8vh] justify-between items-center">
               <div className="flex items-center gap-3 text-white">
@@ -180,10 +187,6 @@ const Chat = () => {
             {!(open && !isMobile) && (
               <div className="flex flex-row justify-center items-center gap-3">
                 <SidebarTrigger className="-ml-1 text-white" />
-                <div className="flex items-center gap-2">
-                  <AnimatedBeeLogo size="sm" />
-                  <span className="text-lg font-bold text-white">BuzzChat</span>
-                </div>
               </div>
             )}
             {activeGroup && (

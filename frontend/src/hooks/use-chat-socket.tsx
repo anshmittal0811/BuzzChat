@@ -21,10 +21,11 @@ export const useChatSocket = ({
   onGroupCreated,
   groupMembers,
 }: IUseChatSocketProps) => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const userRef = useRef<IUser | null>(user);
   const socketRef = useRef<Socket | null>(null);
   const [memberStatus, setMemberStatus] = useState<string>("");
+  const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false);
   const activeGroupRef = useRef<IGroup | null>(activeGroup);
   const groupMemberRef = useRef<Record<string, IUser[]>>(groupMembers);
   const [groupStatus, setGroupStatus] = useState<Record<string, string>>();
@@ -74,17 +75,67 @@ export const useChatSocket = ({
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    // Only connect to socket if user is authenticated and token exists
-    if (!token || !user) return;
+    
+    // Only connect if we don't already have a connected socket
+    if (socketRef.current?.connected) {
+      return;
+    }
+    
+    // Need token to connect
+    if (!token) {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+      setIsSocketConnected(false);
+      return;
+    }
+
+    // Wait until auth loading is complete before connecting
+    if (isLoading) {
+      return;
+    }
+
+    // Must have user data to proceed
+    if (!user) {
+      setIsSocketConnected(false);
+      return;
+    }
+
+
+    // Clean up existing socket first (just in case)
+    if (socketRef.current) {
+      console.log("🧹 Cleaning up existing socket connection");
+      socketRef.current.disconnect();
+      socketRef.current = null;
+    }
 
     const socket = io("http://localhost:3001", {
       auth: { token },
+      reconnection: true,
+      timeout: 20000,
     });
 
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      console.log("User connected to Socket");
+      console.log("Socket connected at:", new Date().toISOString());
+      setIsSocketConnected(true);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected at:", new Date().toISOString());
+      setIsSocketConnected(false);
+    });
+
+    socket.on("connect_error", () => {
+      console.error("Connection error at:", new Date().toISOString());
+      setIsSocketConnected(false);
+    });
+
+    // Add more debugging for socket events
+    socket.on("user.groups.status", (payload) => {
+      setUserGroupsStatus(payload?.status);
     });
 
     socket.on("chat.message.incoming", (payload: IIncomingMessage) => {
@@ -131,12 +182,7 @@ export const useChatSocket = ({
       setGroupStatus(payload?.status);
     });
 
-    socket.on(
-      "user.groups.status",
-      (payload: { status: Record<string, string> }) => {
-        setUserGroupsStatus(payload?.status);
-      }
-    );
+    
 
     socket.on("user.status", (payload: { userId: string; status: string }) => {
       const { status } = payload;
@@ -147,6 +193,7 @@ export const useChatSocket = ({
       // If status timestamp is within last 20 seconds (20000ms), set as online
       const actualStatus = timeDifference <= 20000 ? "online" : status;
       setMemberStatus(actualStatus);
+      setIsSocketConnected(true);
     });
 
     socket.on("group.created", (payload: IGroupCreatedPayload) => {
@@ -194,12 +241,26 @@ export const useChatSocket = ({
     }, 20000);
 
     return () => {
+      console.log("🧹 Cleaning up socket connection in useEffect cleanup");
       clearInterval(heartbeatInterval);
+      
+      // Remove all event listeners
       socket.off("chat.message.incoming");
+      socket.off("chat.message.seen");
+      socket.off("chat.message.deleted");
       socket.off("group.created");
+      socket.off("group.status");
+      socket.off("user.groups.status");
+      socket.off("user.status");
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("connect_error");
+      
       socket.disconnect();
+      socketRef.current = null;
+      setIsSocketConnected(false);
     };
-  }, [user]);
+  }, [user, isLoading]);
 
   const sendMessage = (
     content: string | null,
@@ -247,5 +308,5 @@ export const useChatSocket = ({
     socketRef.current.emit("chat.message.send", JSON.stringify(payload));
   };
 
-  return { sendMessage, memberStatus, groupStatus, userGroupsStatus };
+  return { sendMessage, memberStatus, groupStatus, userGroupsStatus, isSocketConnected };
 };

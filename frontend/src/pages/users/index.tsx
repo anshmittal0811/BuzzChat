@@ -132,8 +132,8 @@ const Users: React.FC = () => {
                     const newGroup = {
                       _id: id,
                       name: null,
-                      createdAt: Date.now().toString(),
-                      updatedAt: Date.now().toString(),
+                      createdAt: new Date().toISOString(),
+                      updatedAt: new Date().toISOString(),
                     } as IGroup;
                     setGroups((prevGroups) => [...prevGroups, newGroup]);
 

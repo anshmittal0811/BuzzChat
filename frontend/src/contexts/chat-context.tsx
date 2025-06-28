@@ -23,6 +23,7 @@ interface IChatContext {
   memberStatus: string | null;
   groupStatus: Record<string, string> | null;
   userGroupsStatus: Record<string, string> | null;
+  isSocketConnected: boolean;
 
   // Actions
   setGroups: React.Dispatch<React.SetStateAction<IGroup[]>>;
@@ -53,7 +54,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [activeGroup, setActiveGroup] = useState<IGroup | null>(null);
   const userMapRef = useRef<Record<string, IUser>>({});
 
-  const { sendMessage, memberStatus, groupStatus, userGroupsStatus } =
+  const { sendMessage, memberStatus, groupStatus, userGroupsStatus, isSocketConnected } =
     useChatSocket({
       activeGroup,
       lastMessage: groupMessages?.[activeGroup?._id ?? ""]?.at(-1) ?? null,
@@ -170,6 +171,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     memberStatus,
     groupStatus: groupStatus ?? null,
     userGroupsStatus: userGroupsStatus ?? null,
+    isSocketConnected,
     setGroups,
     setGroupMessages,
     setGroupMembers,

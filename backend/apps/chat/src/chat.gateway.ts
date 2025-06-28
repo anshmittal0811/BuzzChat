@@ -34,7 +34,7 @@ export class ChatGateway
 
   async onModuleInit() {
     // Use unique consumer group for each chat service instance to ensure all instances receive messages
-    const instanceId = process.env.HOSTNAME || `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const instanceId = process.env.HOSTNAME || `chat-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
     await this.kafkaService.createConsumer(
       `chat-service-${instanceId}`,
       ['group.member.sent', 'group.created'],
@@ -70,6 +70,12 @@ export class ChatGateway
         status: userStatus,
       });
       console.log(`[USER-${userId}] registered with socket ${socket.id}. Total connected users: ${userSocketMap.size}`);
+      
+      // Print full socket map
+      const socketMapEntries = Array.from(userSocketMap.entries()).map(([userId, socket]) => 
+        `${userId}: ${socket.id}`
+      );
+      console.log(`[SOCKET-MAP] Current connections:`, socketMapEntries);
     } catch (error) {
       console.error('Socket authentication failed:', error.message);
       socket.disconnect();
