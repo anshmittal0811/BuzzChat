@@ -70,12 +70,6 @@ export class ChatGateway
         status: userStatus,
       });
       console.log(`[USER-${userId}] registered with socket ${socket.id}. Total connected users: ${userSocketMap.size}`);
-      
-      // Print full socket map
-      const socketMapEntries = Array.from(userSocketMap.entries()).map(([userId, socket]) => 
-        `${userId}: ${socket.id}`
-      );
-      console.log(`[SOCKET-MAP] Current connections:`, socketMapEntries);
     } catch (error) {
       console.error('Socket authentication failed:', error.message);
       socket.disconnect();
