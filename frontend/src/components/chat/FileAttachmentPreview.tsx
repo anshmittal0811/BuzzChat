@@ -27,10 +27,10 @@ interface FileAttachmentPreviewProps {
 
 /**
  * FileAttachmentPreview Component
- * 
+ *
  * Displays a preview of the file being uploaded with progress indicator,
  * success/error states, and removal functionality.
- * 
+ *
  * @param props - Component props
  * @returns JSX element for file attachment preview
  */
@@ -79,7 +79,7 @@ export const FileAttachmentPreview: React.FC<FileAttachmentPreviewProps> = ({
               <div className="w-6 h-6 bg-gray-400 rounded" />
             )}
           </div>
-          
+
           {/* File Details */}
           <div className="flex flex-col flex-1 min-w-0">
             <span className="text-white font-medium truncate" title={file.name}>
@@ -89,22 +89,20 @@ export const FileAttachmentPreview: React.FC<FileAttachmentPreviewProps> = ({
               {formatFileSize(file.size)}
             </span>
           </div>
-          
+
           {/* Status Icon */}
-          <div className="flex-shrink-0">
-            {getStatusIcon()}
-          </div>
+          <div className="flex-shrink-0">{getStatusIcon()}</div>
         </div>
-        
+
         {/* Remove Button */}
-                 <button
-           className="flex justify-center items-center w-8 h-8 ml-3 hover:bg-gray-600 rounded-full transition-colors"
-           onClick={onRemove}
-           aria-label="Remove attachment"
-           type="button"
-         >
-           <SvgIcons.CloseIcon />
-         </button>
+        <button
+          className="flex justify-center items-center w-8 h-8 ml-3 hover:bg-gray-600 rounded-full transition-colors"
+          onClick={onRemove}
+          aria-label="Remove attachment"
+          type="button"
+        >
+          <SvgIcons.CloseIcon />
+        </button>
       </div>
 
       {/* Progress Bar */}
@@ -113,7 +111,9 @@ export const FileAttachmentPreview: React.FC<FileAttachmentPreviewProps> = ({
           <Progress value={progress} className="w-full h-2" />
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-400">{getStatusText()}</span>
-            <span className="text-sm text-gray-400">{Math.round(progress)}%</span>
+            <span className="text-sm text-gray-400">
+              {Math.round(progress)}%
+            </span>
           </div>
         </div>
       )}
@@ -144,4 +144,4 @@ export const FileAttachmentPreview: React.FC<FileAttachmentPreviewProps> = ({
       )}
     </div>
   );
-}; 
+};

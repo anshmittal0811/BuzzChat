@@ -1,22 +1,13 @@
 import { useMessages } from "@/hooks/use-messages";
 import { useIsMobile } from "@/hooks/use-mobile";
-import React, { useCallback, useEffect, useLayoutEffect, useMemo } from "react";
-import { useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { useState } from "react";
 import useInfiniteScroll from "react-infinite-scroll-hook";
-import { List } from "@/components/List";
-import { IMessage } from "@/types";
 import { Button } from "@/components/ui/button";
 import { SvgIcons } from "@/components/SvgIcons";
 import { useAuth } from "@/contexts/auth-context";
-import moment from "moment";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import MessageBubble from "@/components/MessageBubble";
-import { getFriendlyDate, getInitials, groupMessagesByDate } from "@/utils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Progress } from "@/components/ui/progress";
-import extensionToIconMap from "@/constants/fileIconMap";
-import { Badge } from "@/components/ui/badge";
 import {
   EmojiPicker,
   EmojiPickerSearch,
@@ -25,54 +16,15 @@ import {
 import { useChat } from "@/contexts/chat-context";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { useEmojiPicker } from "@/hooks/use-emoji-picker";
+import { useScroll } from "@/hooks/use-scroll";
+import { FileAttachmentPreview } from "./FileAttachmentPreview";
+import { MessageList } from "./MessageList";
 
 // Constants
 const SCROLL_ROOT_MARGIN = "400px 0px 0px 0px";
-const MESSAGE_TIME_FORMAT = "hh:mm A";
 const TEXTAREA_MIN_HEIGHT = 40;
 const TEXTAREA_MAX_HEIGHT = 120;
 
-/**
- * Custom hook for managing scroll behavior
- */
-const useScrollManagement = (
-  reversedItems: IMessage[],
-  activeGroup: { _id?: string } | null
-) => {
-  const scrollableRootRef = useRef<HTMLDivElement | null>(null);
-  const lastScrollDistanceToBottomRef = useRef<number>(0);
-
-  // Reset scroll position when active group changes
-  useEffect(() => {
-    lastScrollDistanceToBottomRef.current = 0;
-  }, [activeGroup]);
-
-  // Maintain scroll position when new messages arrive
-  useLayoutEffect(() => {
-    const scrollableRoot = scrollableRootRef.current;
-    const lastScrollDistanceToBottom =
-      lastScrollDistanceToBottomRef.current ?? 0;
-
-    if (scrollableRoot) {
-      scrollableRoot.scrollTop =
-        scrollableRoot.scrollHeight - lastScrollDistanceToBottom;
-    }
-  }, [reversedItems]);
-
-  const handleRootScroll = useCallback(() => {
-    const rootNode = scrollableRootRef.current;
-    if (rootNode) {
-      const scrollDistanceToBottom = rootNode.scrollHeight - rootNode.scrollTop;
-      lastScrollDistanceToBottomRef.current = scrollDistanceToBottom;
-    }
-  }, []);
-
-  return {
-    scrollableRootRef,
-    handleRootScroll,
-    lastScrollDistanceToBottomRef,
-  };
-};
 
 /**
  * Custom hook for managing message status
@@ -95,36 +47,6 @@ const useMessageStatus = () => {
   return { isMessageSeen };
 };
 
-/**
- * File attachment preview component
- */
-const FileAttachmentPreview: React.FC<{
-  file: File;
-  extension: string | null;
-  url: string | null;
-  progress: number;
-  onRemove: () => void;
-  error: string | null;
-}> = ({ file, extension, url, progress, onRemove, error }) => (
-  <div className="relative flex flex-col p-5 gap-4 shadow-[0_-3px_5px_0_rgba(255,255,255,0.3)] rounded-t-2xl">
-    <div className="flex flex-row w-full justify-between">
-      <div className="flex flex-row items-center gap-3">
-        {extension && extensionToIconMap?.[extension]?.()}
-        <span className="text-white">{file.name}</span>
-        {url && <SvgIcons.CheckIcon />}
-        {error && <SvgIcons.CrossIcon />}
-      </div>
-      <button
-        className="flex justify-center items-center w-5 h-5"
-        onClick={onRemove}
-        aria-label="Remove attachment"
-      >
-        <SvgIcons.CloseIcon />
-      </button>
-    </div>
-    {!url && <Progress value={progress} className="w-full" />}
-  </div>
-);
 
 /**
  * Emoji picker component
@@ -190,78 +112,7 @@ const MessageInput: React.FC<{
   </div>
 );
 
-/**
- * Message list component
- */
-const MessageList: React.FC<{
-  reversedItems: IMessage[];
-  canLoadMore: boolean;
-  infiniteRef: React.Ref<HTMLUListElement>;
-  user: { _id: string } | null;
-  activeGroup: { _id?: string; name?: string | null } | null;
-  isMessageSeen: (date: string) => boolean;
-}> = ({
-  reversedItems,
-  canLoadMore,
-  infiniteRef,
-  user,
-  activeGroup,
-  isMessageSeen,
-}) => (
-  <>
-    {canLoadMore && (
-      <List ref={infiniteRef}>
-        <div className="flex justify-center items-center w-full h-8 mb-5">
-          <SvgIcons.LoadingSpinner />
-        </div>
-      </List>
-    )}
 
-    {groupMessagesByDate(reversedItems).map((group) => (
-      <div key={group.date}>
-        <div className="sticky top-0 z-50 mb-6 w-auto py-1 text-sm text-center">
-          <Badge className="p-2.5 rounded-full bg-secondary pointer-events-none">
-            {getFriendlyDate(group.date)}
-          </Badge>
-        </div>
-
-        {group.messages.map((item: IMessage) => (
-          <div
-            className={`relative flex ${
-              item.sender._id === user?._id ? "justify-end" : "justify-start"
-            } mb-8`}
-            key={item._id}
-          >
-            {item.sender._id !== user?._id && !!activeGroup?.name && (
-              <Avatar className="mr-3">
-                <AvatarImage
-                  width={1}
-                  height={1}
-                  src={item?.sender?.profileUrl ?? undefined}
-                />
-                <AvatarFallback className="font-bold text-black bg-primary">
-                  {getInitials(item?.sender)}
-                </AvatarFallback>
-              </Avatar>
-            )}
-            <MessageBubble
-              name={
-                item.sender._id !== user?._id
-                  ? `${item?.sender?.firstName} ${item?.sender?.lastName}`
-                  : null
-              }
-              attachment={item?.attachment}
-              content={item?.content}
-              time={moment(item?.createdAt).format(MESSAGE_TIME_FORMAT)}
-              status={isMessageSeen(item?.createdAt) ? "read" : "delivered"}
-              isOutgoing={item.sender._id === user?._id}
-            />
-          </div>
-        ))}
-      </div>
-    ))}
-  </>
-);
 
 /**
  * Main Thread component
@@ -309,7 +160,7 @@ const Thread: React.FC = () => {
   });
 
   // Scroll management
-  const { scrollableRootRef, handleRootScroll } = useScrollManagement(
+  const { scrollableRootRef, handleRootScroll } = useScroll(
     useMemo(() => [...messagesItems].reverse(), [messagesItems]),
     activeGroup
   );
@@ -413,6 +264,7 @@ const Thread: React.FC = () => {
             progress={fileUploadState.progress}
             onRemove={clearFileUpload}
             error={fileUploadState.error}
+            isUploading={fileUploadState.isUploading}
           />
         )}
 
