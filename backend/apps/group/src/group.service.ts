@@ -82,80 +82,152 @@ export class GroupService {
         };
     }
 
+    /**
+     * Creates aggregation pipeline to find groups where user is a member
+     */
+    private getUserGroupsMatchStage(userId: Types.ObjectId) {
+        return [
+            {
+                $lookup: {
+                    from: 'groupmembers',
+                    localField: '_id',
+                    foreignField: 'group',
+                    as: 'memberships',
+                },
+            },
+            {
+                $match: {
+                    'memberships.user': userId,
+                },
+            },
+        ] as any[];
+    }
+
+    /**
+     * Creates aggregation pipeline to get all group members with their details
+     */
+    private getGroupMembersStage() {
+        return [
+            {
+                $lookup: {
+                    from: 'groupmembers',
+                    localField: '_id',
+                    foreignField: 'group',
+                    as: 'memberRelations',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'memberRelations.user',
+                    foreignField: '_id',
+                    as: 'members',
+                },
+            },
+            {
+                $addFields: {
+                    // Remove password field from members
+                    members: {
+                        $map: {
+                            input: '$members',
+                            as: 'member',
+                            in: {
+                                _id: '$$member._id',
+                                email: '$$member.email',
+                                firstName: '$$member.firstName',
+                                lastName: '$$member.lastName',
+                                profileUrl: '$$member.profileUrl',
+                                createdAt: '$$member.createdAt',
+                                updatedAt: '$$member.updatedAt',
+                            },
+                        },
+                    },
+                },
+            },
+        ] as any[];
+    }
+
+    /**
+     * Creates aggregation pipeline to get last 10 messages for each group
+     */
+    private getLastMessagesStage() {
+        return [
+            {
+                $lookup: {
+                    from: 'messages',
+                    let: { groupId: '$_id' },
+                    pipeline: [
+                        { 
+                            $match: { 
+                                $expr: { $eq: ['$group', '$$groupId'] } 
+                            } 
+                        },
+                        { $sort: { createdAt: -1 } },
+                        { $limit: 10 },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                localField: 'sender',
+                                foreignField: '_id',
+                                as: 'senderDetails',
+                            },
+                        },
+                        { 
+                            $unwind: '$senderDetails' 
+                        },
+                        {
+                            $addFields: {
+                                sender: {
+                                    _id: '$senderDetails._id',
+                                    email: '$senderDetails.email',
+                                    firstName: '$senderDetails.firstName',
+                                    lastName: '$senderDetails.lastName',
+                                    profileUrl: '$senderDetails.profileUrl',
+                                },
+                            },
+                        },
+                        {
+                            $unset: 'senderDetails'
+                        },
+                    ] as any[],
+                    as: 'lastMessages',
+                },
+            },
+        ] as any[];
+    }
+
+    /**
+     * Fetches user group contexts with members and last messages
+     */
     async fetchUserGroupContexts(
         fetchGroupDto: FetchGroupDto
     ): Promise<
         { group: Group; members: Omit<User, 'password'>[]; lastMessages: Message[] }[]
     > {
         try {
-            const objectId = new Types.ObjectId(fetchGroupDto._id);
-            const groups = await this.groupModel.aggregate([
+            const userId = new Types.ObjectId(fetchGroupDto._id);
+            
+            // Build aggregation pipeline with readable stages
+            const pipeline = [
+                // Stage 1: Find groups where user is a member
+                ...this.getUserGroupsMatchStage(userId),
+                
+                // Stage 2: Get all members for each group
+                ...this.getGroupMembersStage(),
+                
+                // Stage 3: Get last 10 messages for each group
+                ...this.getLastMessagesStage(),
+                
+                // Stage 4: Clean up and sort
                 {
-                    $lookup: {
-                        from: 'groupmembers',
-                        localField: '_id',
-                        foreignField: 'group',
-                        as: 'memberships',
-                    },
+                    $unset: ['memberships', 'memberRelations']
                 },
                 {
-                    $match: {
-                        'memberships.user': objectId,
-                    },
+                    $sort: { updatedAt: -1 }
                 },
-                {
-                    $unwind: {
-                        path: '$memberships',
-                        preserveNullAndEmptyArrays: true,
-                    },
-                },
-                {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'memberships.user',
-                        foreignField: '_id',
-                        as: 'memberships.user',
-                    },
-                },
-                {
-                    $unwind: {
-                        path: '$memberships.user',
-                        preserveNullAndEmptyArrays: true,
-                    },
-                },
-                {
-                    $group: {
-                        _id: '$_id',
-                        name: { $first: '$name' },
-                        createdAt: { $first: '$createdAt' },
-                        updatedAt: { $first: '$updatedAt' },
-                        imageUrl: { $first: '$imageUrl' },
-                        members: { $push: '$memberships.user' },
-                    },
-                },
-                {
-                    $lookup: {
-                        from: 'messages',
-                        let: { groupId: '$_id' },
-                        pipeline: [
-                            { $match: { $expr: { $eq: ['$group', '$$groupId'] } } },
-                            { $sort: { createdAt: -1 } },
-                            { $limit: 10 },
-                            {
-                                $lookup: {
-                                    from: 'users',
-                                    localField: 'sender',
-                                    foreignField: '_id',
-                                    as: 'sender',
-                                },
-                            },
-                            { $unwind: '$sender' },
-                        ],
-                        as: 'lastMessages',
-                    },
-                },
-                { $sort: { updatedAt: -1 } },
-            ]);
+            ];
+
+            const groups = await this.groupModel.aggregate(pipeline);
             return groups;
         } catch (error) {
             throw new RpcException({

@@ -64,7 +64,7 @@ const ChatLayout = ({
           setActiveGroup={setActiveGroup}
         />
         
-        <SidebarInset className="relative flex flex-col h-full">
+        <SidebarInset className="relative flex flex-col h-screen">
           <ChatHeader
             sidebarOpen={sidebarOpen}
             activeGroup={activeGroup}

@@ -11,7 +11,7 @@ export const CHAT_CONSTANTS = {
     NONE: "none",
   },
   LAYOUT: {
-    HEADER_HEIGHT: "8vh",
+    HEADER_HEIGHT: "10vh",
     CONTENT_HEIGHT: "92vh",
     SIDEBAR_FOOTER_PADDING: "p-5",
   },

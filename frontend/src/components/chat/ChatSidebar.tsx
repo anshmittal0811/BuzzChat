@@ -78,7 +78,7 @@ const ChatSidebar = ({
 
   const renderSidebarHeader = () => (
     <SidebarHeader className="py-0">
-      <div className={`flex flex-row justify-between items-center h-[${CHAT_CONSTANTS.LAYOUT.HEADER_HEIGHT}]`}>
+      <div className={`flex flex-row justify-between items-center h-16`}>
         <div className="flex items-center gap-3 text-white">
           <text className="text-xl font-bold text-white">
             {CHAT_CONSTANTS.APP_NAME}

@@ -85,7 +85,7 @@ const ChatHeader = ({
   };
 
   return (
-    <header className={`flex shrink-0 items-center gap-2 bg-secondary px-4 h-[${CHAT_CONSTANTS.LAYOUT.HEADER_HEIGHT}]`}>
+    <header className={`flex shrink-0 items-center gap-2 bg-secondary px-4 h-16`}>
       {shouldShowSidebarTrigger && (
         <div className="flex flex-row justify-center items-center gap-3">
           <SidebarTrigger className="-ml-1 text-white" />
