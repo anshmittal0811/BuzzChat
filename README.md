@@ -26,7 +26,6 @@ A modern, real-time chat application built with a microservices architecture, fe
 
 ### 📁 File Sharing
 - **Image and file uploads** with Cloudinary integration
-- **Drag and drop** file upload interface
 - **File preview** and download capabilities
 - **Multiple file format support**
 
