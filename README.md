@@ -358,23 +358,6 @@ npm start
 npm run lint
 ```
 
-## 🧪 Testing
-
-### Backend Testing
-```bash
-# Unit tests
-npm run test
-
-# E2E tests
-npm run test:e2e
-
-# Test coverage
-npm run test:cov
-
-# Watch mode
-npm run test:watch
-```
-
 ### Load Testing
 ```bash
 # Test load balancer
@@ -418,25 +401,6 @@ docker-compose -f docker-compose.prod.yml build
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-### Development Guidelines
-- Follow TypeScript best practices
-- Write tests for new features
-- Update documentation
-- Follow conventional commit messages
-- Ensure Docker builds pass
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🆘 Troubleshooting
 
 ### Common Issues
@@ -464,7 +428,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Getting Help
 - Check the [Backend Documentation](backend/BACKEND_DOCUMENTATION.md)
 - Review [Quick Start Guide](backend/QUICK_START_GUIDE.md)
-- Open an issue on GitHub
 
 ## 🙏 Acknowledgments
 

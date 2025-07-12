@@ -465,23 +465,6 @@ All microservices run in separate containers with:
    ./docker-start.sh logs [service-name]
    ```
 
-### Testing
-
-#### Unit Tests
-```bash
-npm run test
-```
-
-#### E2E Tests
-```bash
-npm run test:e2e
-```
-
-#### Test Coverage
-```bash
-npm run test:cov
-```
-
 ---
 
 ## 🔧 Key Implementation Details
