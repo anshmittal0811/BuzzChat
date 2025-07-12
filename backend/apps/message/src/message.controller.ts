@@ -8,7 +8,11 @@ import { FetchGroupMessagesDto } from '@app/shared/dtos/message.dto';
 
 @Controller()
 export class MessageController implements OnModuleInit {
-  constructor(private readonly messageService: MessageService, private readonly sharedService: SharedService, private readonly kafkaService: KafkaService) { }
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly sharedService: SharedService,
+    private readonly kafkaService: KafkaService,
+  ) { }
 
   async onModuleInit() {
     await this.kafkaService.createConsumer(

@@ -1,6 +1,6 @@
 import { User } from '@app/shared';
 import { RegisterDto } from '@app/shared/dtos/register.dto';
-import { GetUsersQueryDto } from '@app/shared/dtos/user.dto';
+import { UsersQueryDto } from '@app/shared/dtos/user.dto';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,7 +12,7 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<User>,
   ) { }
 
-  async getAllUsers(query: GetUsersQueryDto) {
+  async fetchAllUsers(query: UsersQueryDto) {
     const { search = '', page = 1, limit = 10, userId } = query;
     const skip = (page - 1) * limit;
 

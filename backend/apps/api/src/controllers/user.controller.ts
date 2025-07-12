@@ -20,7 +20,7 @@ import {
   timeout,
 } from 'rxjs';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { GetUsersQueryDto } from '@app/shared/dtos/user.dto';
+import { UsersQueryDto } from '@app/shared/dtos/user.dto';
 
 @Controller('users')
 export class UserController {
@@ -57,7 +57,7 @@ export class UserController {
   @Get()
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
-  async getAllUsers(@Query() query: Omit<GetUsersQueryDto, 'userId'>, @Req() req: Request) {
+  async getAllUsers(@Query() query: Omit<UsersQueryDto, 'userId'>, @Req() req: Request) {
     const response = await firstValueFrom(
       this.authService.send({ cmd: 'users.list' }, { ...query, userId: req['user'].sub }).pipe(
         timeout(7000),

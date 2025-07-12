@@ -9,8 +9,7 @@ import {
 import { SharedService } from '@app/shared';
 import { LoginDto } from '@app/shared/dtos/login.dto';
 import { RegisterDto } from '@app/shared/dtos/register.dto';
-import { JwtPayload } from '@app/shared/interfaces/jwt-payload.interface';
-import { GetUsersQueryDto } from '@app/shared/dtos/user.dto';
+import { UsersQueryDto } from '@app/shared/dtos/user.dto';
 
 @Controller()
 export class AuthController {
@@ -32,9 +31,9 @@ export class AuthController {
   }
 
   @MessagePattern({ cmd: 'users.list' })
-  async getAllUsers(@Ctx() context: RmqContext, @Payload() query: GetUsersQueryDto) {
+  async fetchAllUsers(@Ctx() context: RmqContext, @Payload() query: UsersQueryDto) {
     this.sharedService.acknowledgeMessage(context);
-    return await this.authService.getAllUsers(query);
+    return await this.authService.fetchAllUsers(query);
   }
 
   @MessagePattern({ cmd: 'user.register' })

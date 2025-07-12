@@ -21,7 +21,6 @@ import { SvgIcons } from "@/components/SvgIcons";
 import { cn } from "@/lib/utils";
 import { IGroup, IUser, IMessage } from "@/types";
 import { CHAT_CONSTANTS } from "@/constants/chat";
-import AnimatedBeeLogo from "@/components/AnimatedBeeLogo";
 import Settings from "@/components/Settings";
 import ThreadItem from "./ThreadItem";
 import User from "./User";

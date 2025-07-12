@@ -6,7 +6,7 @@ import * as jwt from 'jsonwebtoken';
 import { UserService } from '../../user/user.service';
 import { ConfigService } from '@nestjs/config';
 import { RpcException } from '@nestjs/microservices';
-import { GetUsersQueryDto } from '@app/shared/dtos/user.dto';
+import { UsersQueryDto } from '@app/shared/dtos/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -106,8 +106,8 @@ export class AuthService {
     }
   }
 
-  async getAllUsers(query: GetUsersQueryDto) {
-    return await this.userService.getAllUsers(query);
+  async fetchAllUsers(query: UsersQueryDto) {
+    return await this.userService.fetchAllUsers(query);
   }
 
   async getUserById(userId: string) {

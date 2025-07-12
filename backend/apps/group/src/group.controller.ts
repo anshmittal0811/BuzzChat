@@ -8,7 +8,11 @@ import { GroupService } from './group.service';
 
 @Controller()
 export class GroupController implements OnModuleInit {
-    constructor(private readonly groupService: GroupService, private readonly sharedService: SharedService, private readonly kafkaService: KafkaService) { }
+    constructor(
+        private readonly groupService: GroupService,
+        private readonly sharedService: SharedService,
+        private readonly kafkaService: KafkaService,
+    ) { }
 
     async onModuleInit() {
         await this.kafkaService.createConsumer(

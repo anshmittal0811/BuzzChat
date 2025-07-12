@@ -15,7 +15,10 @@ import { MongoDBModule } from "@app/shared/modules/mongodb.module";
         }),
         SharedModule,
         MongoDBModule,
-        MongooseModule.forFeatureAsync([{ name: Group.name, useFactory: () => GroupSchema }, { name: Message.name, useFactory: () => MessageSchema }, { name: User.name, useFactory: () => UserSchema }, { name: GroupMember.name, useFactory: () => GroupMemberSchema }]),
+        MongooseModule.forFeatureAsync([{ name: Group.name, useFactory: () => GroupSchema }, 
+            { name: Message.name, useFactory: () => MessageSchema }, 
+            { name: User.name, useFactory: () => UserSchema }, 
+            { name: GroupMember.name, useFactory: () => GroupMemberSchema }]),
     ],
     controllers: [GroupController],
     providers: [GroupService, KafkaService]
