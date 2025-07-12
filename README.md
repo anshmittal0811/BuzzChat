@@ -38,74 +38,7 @@ A modern, real-time chat application built with a microservices architecture, fe
 
 ## 🏛 Architecture Overview
 
-```mermaid
-graph TB
-    subgraph "Frontend"
-        FE[Next.js App<br/>Port 3000]
-    end
-    
-    subgraph "Load Balancer"
-        LB[Nginx<br/>Port 3001]
-    end
-    
-    subgraph "API Layer"
-        API[API Gateway<br/>Port 5000]
-    end
-    
-    subgraph "Microservices"
-        AUTH[Auth Service<br/>RabbitMQ]
-        CHAT1[Chat Service 1<br/>WebSocket + HTTP]
-        CHAT2[Chat Service 2<br/>WebSocket + HTTP]
-        CHAT3[Chat Service 3<br/>WebSocket + HTTP]
-        GROUP[Group Service<br/>RabbitMQ + Kafka]
-        MSG[Message Service<br/>RabbitMQ + Kafka]
-        USER[User Service<br/>RabbitMQ]
-    end
-    
-    subgraph "Infrastructure"
-        MONGO[(MongoDB)]
-        REDIS[(Redis)]
-        RABBIT[RabbitMQ]
-        KAFKA[Kafka]
-        CLOUD[Cloudinary]
-    end
-    
-    FE --> API
-    FE --> LB
-    LB --> CHAT1
-    LB --> CHAT2  
-    LB --> CHAT3
-    API --> AUTH
-    API --> GROUP
-    API --> MSG
-    API --> USER
-    API --> CLOUD
-    
-    AUTH --> MONGO
-    AUTH --> REDIS
-    AUTH --> RABBIT
-    
-    CHAT1 --> MONGO
-    CHAT1 --> REDIS
-    CHAT1 --> KAFKA
-    CHAT2 --> MONGO
-    CHAT2 --> REDIS
-    CHAT2 --> KAFKA
-    CHAT3 --> MONGO
-    CHAT3 --> REDIS
-    CHAT3 --> KAFKA
-    
-    GROUP --> MONGO
-    GROUP --> KAFKA
-    GROUP --> RABBIT
-    
-    MSG --> MONGO
-    MSG --> KAFKA
-    MSG --> RABBIT
-    
-    USER --> MONGO
-    USER --> RABBIT
-```
+![BuzzChat Architecture](frontend/public/Architecture.png)
 
 ## 🛠 Tech Stack
 
