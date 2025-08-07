@@ -95,20 +95,3 @@ docker-compose config
 # Inspect a specific service's environment
 docker inspect <container_name> | grep -A 20 "Env"
 ```
-
-## Production Deployment
-
-For production deployment:
-
-1. Use a secure method to manage environment variables (e.g., Docker secrets, Kubernetes secrets)
-2. Never use default passwords
-3. Use strong, unique values for all secrets
-4. Regularly rotate credentials
-5. Monitor access logs and set up alerts
-
-## Contributing
-
-When contributing to this project:
-1. Never commit actual credential values
-2. Update `.env.example` if you add new environment variables
-3. Document any new environment variables in this file 
