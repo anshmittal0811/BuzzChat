@@ -11,8 +11,7 @@
 8. [Real-time Communication](#real-time-communication)
 9. [Docker Setup](#docker-setup)
 10. [Development Guide](#development-guide)
-11. [Troubleshooting](#troubleshooting)
-
+    
 ---
 
 ## 🌟 Overview
