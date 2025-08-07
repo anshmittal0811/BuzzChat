@@ -13,7 +13,6 @@ export class EitherContentOrAttachmentConstraint implements ValidatorConstraintI
   }
 }
 
-
 export class ChatMessageDto {
   @IsString()
   @IsNotEmpty()
