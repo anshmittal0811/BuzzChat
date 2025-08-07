@@ -314,26 +314,6 @@ docker-compose logs api-gateway
 docker-compose logs chat-service-1
 ```
 
-## 🚀 Deployment
-
-### Production Considerations
-1. **Environment Variables**: Use secure values for JWT_SECRET, database passwords
-2. **SSL/TLS**: Configure HTTPS for production
-3. **Database**: Use MongoDB Atlas or dedicated MongoDB instance
-4. **Redis**: Use Redis Cloud or dedicated Redis instance
-5. **File Storage**: Configure Cloudinary or AWS S3
-6. **Load Balancing**: Use external load balancer (AWS ALB, Google Load Balancer)
-7. **Monitoring**: Implement logging and monitoring (ELK stack, Prometheus)
-
-### Docker Production Build
-```bash
-# Build production images
-docker-compose -f docker-compose.prod.yml build
-
-# Deploy
-docker-compose -f docker-compose.prod.yml up -d
-```
-
 ## 🆘 Troubleshooting
 
 ### Common Issues
