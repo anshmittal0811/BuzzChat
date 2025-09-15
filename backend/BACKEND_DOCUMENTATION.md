@@ -32,7 +32,7 @@ The **Scalable Chat Backend** is a modern, microservices-based chat application 
 
 ### Communication Patterns
 1. **HTTP REST API**: Client ↔ API Gateway ↔ Services
-2. **RabbitMQ**: Async communication between microservices
+2. **RabbitMQ RPC**: Synchronous communication between microservices
 3. **Kafka**: Event streaming for real-time notifications
 4. **WebSocket**: Real-time bidirectional communication for chat
 
@@ -50,7 +50,7 @@ The **Scalable Chat Backend** is a modern, microservices-based chat application 
 - **Redis**: In-memory cache for session management and performance
 
 ### Message Queuing & Events
-- **RabbitMQ**: Message broker for service-to-service communication
+- **RabbitMQ RPC**: Synchronous request-response for service-to-service communication
 - **Kafka**: Distributed event streaming platform
 - **Socket.IO**: Real-time WebSocket communication
 
