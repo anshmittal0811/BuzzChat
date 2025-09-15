@@ -216,37 +216,6 @@ socket.on('group.created', (group) => {
 });
 ```
 
-## 🗂 Project Structure
-
-```
-scalable-chat/
-├── backend/                    # NestJS Backend
-│   ├── apps/                   # Microservices
-│   │   ├── api/               # API Gateway
-│   │   ├── auth/              # Authentication Service
-│   │   ├── chat/              # Chat Service (WebSocket)
-│   │   ├── group/             # Group Management
-│   │   ├── message/           # Message Service
-│   │   └── user/              # User Service
-│   ├── libs/shared/           # Shared Libraries
-│   │   ├── schemas/           # Database Schemas
-│   │   ├── dtos/              # Data Transfer Objects
-│   │   ├── services/          # Shared Services
-│   │   └── modules/           # Shared Modules
-│   ├── docker-compose.yml     # Infrastructure Setup
-│   └── Dockerfile             # Multi-stage Build
-├── frontend/                  # Next.js Frontend
-│   ├── src/
-│   │   ├── components/        # React Components
-│   │   ├── pages/             # Next.js Pages
-│   │   ├── contexts/          # React Contexts
-│   │   ├── hooks/             # Custom Hooks
-│   │   ├── services/          # API Services
-│   │   └── types/             # TypeScript Types
-│   └── public/                # Static Assets
-└── README.md                  # This file
-```
-
 ## 🔧 Development Commands
 
 ### Backend Commands
