@@ -104,12 +104,6 @@ npm install
 npm run dev
 ```
 
-### 4. Access the Application
-- **Frontend**: http://localhost:3000
-- **API Gateway**: http://localhost:5000
-- **Chat WebSocket**: ws://localhost:3001
-- **RabbitMQ Management**: http://localhost:15672 (guest/guest)
-
 ## 🔧 Environment Variables
 
 ### Backend (.env)
