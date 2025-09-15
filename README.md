@@ -37,7 +37,7 @@ A modern, real-time chat application built with a microservices architecture, fe
 
 ## 🏛 Architecture Overview
 
-![BuzzChat Architecture](frontend/public/Architecture.png)
+![BuzzChat Architecture](Architecture.png)
 
 ## 🛠 Tech Stack
 
