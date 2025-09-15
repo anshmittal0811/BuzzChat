@@ -2,7 +2,6 @@
 
 A modern, real-time chat application built with a microservices architecture, featuring instant messaging, group chats, file sharing, and user presence tracking. Designed to scale to thousands of concurrent users.
 
-![Chat Application](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-16%2B-green.svg)
 ![NestJS](https://img.shields.io/badge/NestJS-10.x-red.svg)
 ![Next.js](https://img.shields.io/badge/Next.js-15.x-black.svg)
